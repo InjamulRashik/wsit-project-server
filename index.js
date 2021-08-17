@@ -26,10 +26,34 @@ client.connect((err) => {
     posts.insertOne(post).then((result) => {});
   });
   app.get("/allPosts", (req, res) => {
-    //console.log(req.query.email);
     posts.find({}).toArray((err, documents) => {
       res.send(documents);
     });
+  });
+  app.patch("/addComment/:id", (req, res) => {
+    posts
+      .updateOne(
+        { _id: ObjectId(req.params.id) },
+        {
+          $push: {
+            comments: {
+              id: Date.now(),
+              name: req.body.name,
+              comment: req.body.comment,
+            },
+          },
+        }
+      )
+      .then((result) => {
+        console.log(result);
+        res.send("Success");
+      });
+  });
+  app.get("/comments/:id", (req, res) => {
+    console.log(req.params.id);
+    posts
+      .findOne({ _id: ObjectId(req.params.id) })
+      .then((result) => res.send(result.comments));
   });
 });
 
