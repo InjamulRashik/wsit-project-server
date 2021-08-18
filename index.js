@@ -39,18 +39,35 @@ client.connect((err) => {
             comments: {
               id: Date.now(),
               name: req.body.name,
+              photo: req.body.name,
               comment: req.body.comment,
             },
           },
         }
       )
       .then((result) => {
-        console.log(result);
-        res.send("Success");
+        res.send();
+      });
+  });
+  app.put("/updateVote/:id", (req, res) => {
+    posts
+      .updateOne(
+        { _id: ObjectId(req.params.id) },
+        {
+          $set: {
+            upvote: req.body.upvote,
+            downvote: req.body.downvote,
+          },
+        }
+      )
+      .then((result) => {
+        res.send();
+      })
+      .catch((err) => {
+        console.log(err);
       });
   });
   app.get("/comments/:id", (req, res) => {
-    console.log(req.params.id);
     posts
       .findOne({ _id: ObjectId(req.params.id) })
       .then((result) => res.send(result.comments));
