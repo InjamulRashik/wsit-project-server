@@ -11,6 +11,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+const port = "5000";
+
 app.get("/", (req, res) => {
   res.send("Working Completely");
 });
@@ -74,4 +76,4 @@ client.connect((err) => {
   });
 });
 
-app.listen("5000");
+app.listen(process.env.PORT || port);
